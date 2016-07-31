@@ -1,4 +1,5 @@
 *.o
 yaccia
 lexjmptbl.s
+enums.s
 

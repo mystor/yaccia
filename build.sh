@@ -4,6 +4,7 @@ AS_FLAGS="-mmnemonic=intel -msyntax=intel -mnaked-reg --64 --gdwarf-2"
 
 set -x
 # Codegen
+python gen_enums.py > enums.s
 python gen_lexjmptbl.py
 
 # Build and link

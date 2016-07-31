@@ -1,0 +1,4 @@
+*.o
+yaccia
+lexjmptbl.s
+

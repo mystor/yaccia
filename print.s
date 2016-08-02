@@ -12,23 +12,21 @@
 
 # Implementation code and logic for the printf macro, which prints a
 # formatted string to the screen.
-.Macro pushstr str
+              .Macro pushstr str
               LOCAL literal
-
               .Data
 literal:      .Asciz str
-
               .Text
               push  offset literal
-.Endm
+              .Endm
 
-.Macro printf, str
+              .Macro printf, str
               pushstr str
               call  do_printf
-.Endm
+              .Endm
 
               .Set  all_regs_size, 112
-.Macro nonrec_save_all_regs to
+              .Macro nonrec_save_all_regs to
               mov   [to+0], rax
               mov   [to+8], rbx
               mov   [to+16], rcx
@@ -43,8 +41,8 @@ literal:      .Asciz str
               mov   [to+88], r13
               mov   [to+96], r14
               mov   [to+104], r15
-.Endm
-.Macro nonrec_restore_all_regs from
+              .Endm
+              .Macro nonrec_restore_all_regs from
               mov   rax, [from+0]
               mov   rbx, [from+8]
               mov   rcx, [from+16]
@@ -59,7 +57,7 @@ literal:      .Asciz str
               mov   r13, [from+88]
               mov   r14, [from+96]
               mov   r15, [from+104]
-.Endm
+              .Endm
 
               .Comm _printf_regs, all_regs_size # Place to store regs while running printf
 
@@ -219,3 +217,4 @@ _print_char_visible:
               mov   rdx, 1
               syscall
               ret
+

@@ -14,6 +14,7 @@
               .Include "enums.s"
               .Include "read.s"
               .Include "lex.s"
+              .Include "elf.s"
               .Include "emit.s"
               .Include "parse.s"
 

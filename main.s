@@ -2,6 +2,10 @@
 # Enable the alternate macro extensions
               .Altmacro
 
+              .Set KB, 1024
+              .Set MB, 1024*KB
+              .Set GB, 1024*MB
+
               .Macro exit status
               mov   rdi, status
               mov   rax, SYS_EXIT
@@ -43,6 +47,8 @@ _strcmp_eq:
 
               .Global _start
 _start:
+              mov   rax, STDOUT
+              call  write_elf
               # Read the first tokens and characters
               call  next_chr
               call  next_token

@@ -80,7 +80,7 @@ _printf_format:
               mov   rsi, r8
               mov   rdx, r9
               sub   rdx, rsi
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               syscall
               inc   r9
               cmpb  [r9], 's'
@@ -126,7 +126,7 @@ _printf_eos:
               mov   rsi, r8
               mov   rdx, r9
               sub   rdx, rsi
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               syscall
               push  r10
               nonrec_restore_all_regs _printf_regs
@@ -148,7 +148,7 @@ print_str:
               call  strlen
               mov   rdx, rax
               pop   rsi
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               mov   rax, SYS_WRITE
               syscall
               ret
@@ -164,7 +164,7 @@ print_signed:
 _print_signed_neg:
               push  rax
               mov   rax, SYS_WRITE
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               mov   rsi, offset _print_signed_neg_sign
               mov   rdx, 1
               syscall
@@ -194,7 +194,7 @@ _print_unsigned_loop:
               jne   _print_unsigned_loop
 _print_unsigned_done:
               mov   rax, SYS_WRITE
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               mov   rsi, rsp
               mov   rdx, r9
               syscall
@@ -212,7 +212,7 @@ print_char:
 _print_char_visible:
               mov   _print_char_buf, al
               mov   rax, SYS_WRITE
-              mov   rdi, STDOUT
+              mov   rdi, STDERR
               mov   rsi, offset _print_char_buf
               mov   rdx, 1
               syscall

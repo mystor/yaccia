@@ -10,7 +10,7 @@ _parse_comma_expr_loop:
               cmpq  token_type, TOK_COMMA
               jne   _parse_comma_expr_done
               call  next_token
-              call  pop_type        # Discard the value of the last operand
+              call  discard_val     # Discard the value of the last operand
               call  parse_assign_expr
               jmp   _parse_comma_expr_loop
 _parse_comma_expr_done:
@@ -39,14 +39,38 @@ parse_logical_and:
 
 parse_bitwise_or:
               call  parse_bitwise_xor
+_parse_bitwise_or_loop:
+              cmpq  token_type, TOK_OR
+              jne   _parse_bitwise_or_done
+              call  next_token
+              call  parse_bitwise_xor
+              call  emit_bitwise_or
+              jmp   _parse_bitwise_or_loop
+_parse_bitwise_or_done:
               ret
 
 parse_bitwise_xor:
               call  parse_bitwise_and
+#_parse_bitwise_xor_loop:
+#              cmpq  token_type, TOK_XOR
+#              jne   _parse_bitwise_xor_done
+#              call  next_token
+#              call  parse_bitwise_and
+#              call  emit_bitwise_xor
+#              jmp   _parse_bitwise_xor_loop
+#_parse_bitwise_xor_done:
               ret
 
 parse_bitwise_and:
               call  parse_logical_eq
+_parse_bitwise_and_loop:
+              cmpq  token_type, TOK_AND
+              jne   _parse_bitwise_and_done
+              call  next_token
+              call  parse_logical_eq
+              call  emit_bitwise_and
+              jmp   _parse_bitwise_and_loop
+_parse_bitwise_and_done:
               ret
 
 parse_logical_eq:

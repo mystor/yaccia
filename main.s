@@ -14,6 +14,7 @@
               .Endm
 
 # Defines "printf" which prints to STDOUT
+              .Include "mem.s"
               .Include "print.s"
               .Include "enums.s"
               .Include "read.s"
@@ -47,8 +48,6 @@ _strcmp_eq:
 
               .Global _start
 _start:
-              mov   rax, STDOUT
-              call  write_elf
               # Read the first tokens and characters
               call  next_chr
               call  next_token
@@ -56,6 +55,8 @@ _start:
               call  parse_expr
               cmpq  token_type, TOK_EOF
               jne   _expected_eof
+              mov   rax, STDOUT
+              call  write_elf
               exit 0
 _expected_eof:
               mov rax, token_type

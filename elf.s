@@ -183,14 +183,20 @@ ELF_begin.end:
 
               # The .text section
 ELF_text_ptr: .8byte ELF_text
-              .Set ELF_text.size, 128*MB
-              .Set ELF_text.end, ELF_text + ELF_text.size
+              .Set  ELF_text.size, 128*MB
+              .Global ELF_text.end  # this symbol must be global, so that the
+                                    # linker can fix up its value
+              .Set  ELF_text.end, (ELF_text + ELF_text.size)
               .Comm ELF_text, ELF_text.size
 
               .Text
 # Call to write the ELF file out. rax is the FD to write to
 write_elf:
 # Update headers with the correct values
+              movq  text.sh_offset, ELF_begin.end - ELF_begin
+              mov   rcx, ELF_text_ptr # calculate the section size
+              sub   rcx, offset ELF_text
+              movq  text.sh_size, rcx
 
 # Write out the headers
               mov   rdi, rax
@@ -200,5 +206,19 @@ write_elf:
               syscall
 
 # Write out the other sections
+# Write out .text
+              mov   rax, SYS_WRITE
+              mov   rsi, offset ELF_text
+              mov   rdx, text.sh_size
+              syscall
+
+              ret
+
+# Write some bytes to the .text section
+# rsi is the start, rdx is the length
+write_text:
+              mov   rdi, ELF_text_ptr
+              add   ELF_text_ptr, rdx
+              call  memcpy
               ret
 
